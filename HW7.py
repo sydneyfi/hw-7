@@ -1,7 +1,7 @@
 
-# Your name:
-# Your student id:
-# Your email:
+# Your name: Sydney Finkelstein
+# Your student id: 31660029
+# Your email: sydneyfi@umich.edu
 # List who you have worked with on this project:
 
 import unittest
@@ -53,6 +53,16 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
+    cur.execute('''CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT, position_id INTEGER, birthyear INTEGER, nationality TEXT)''')
+
+    for player in data["squad"]:
+        player_position = player["position"]
+        cur.execute("SELECT id FROM Positions WHERE position = ?", (player_position,))
+        position_id = int(cur.fetchone()[0])
+
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?, ?, ?, ?, ?)", (int(player["id"]), player["name"], position_id, int(player["dateOfBirth"][:4]), player["nationality"]))
+    
+    conn.commit()
     pass
 
 ## [TASK 2]: 10 points
@@ -82,7 +92,6 @@ def nationality_search(countries, cur, conn):
 #     players with birthdates BEFORE 2004
 #     This function returns a list of tuples each containing 
 #     the player’s name, nationality, and birth year. 
-
 
 def birthyear_nationality_search(age, country, cur, conn):
     pass
