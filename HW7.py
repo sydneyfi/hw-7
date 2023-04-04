@@ -2,7 +2,7 @@
 # Your name: Sydney Finkelstein
 # Your student id: 31660029
 # Your email: sydneyfi@umich.edu
-# List who you have worked with on this project:
+# List who you have worked with on this project: Katherine Zhao
 
 import unittest
 import sqlite3
@@ -53,7 +53,7 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    cur.execute('''CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT, position_id INTEGER, birthyear INTEGER, nationality TEXT)''')
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT, position_id INTEGER, birthyear INTEGER, nationality TEXT)")
 
     for player in data["squad"]:
         player_position = player["position"]
@@ -102,6 +102,14 @@ def nationality_search(countries, cur, conn):
 #     the player’s name, nationality, and birth year. 
 
 def birthyear_nationality_search(age, country, cur, conn):
+    lst = []
+    year = 2023 - age
+    cur.execute("SELECT name, nationality, birthyear FROM Players WHERE birthyear < ? AND nationality = ?", (year, country))
+    for row in cur:
+        lst.append(row)
+    
+    conn.commit()
+    return lst
     pass
 
 ## [TASK 4]: 15 points
